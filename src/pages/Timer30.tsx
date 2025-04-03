@@ -10,7 +10,7 @@ function Timer30() {
   const totalTime = useRef(30 * 60);
   
   useEffect(() => {
-    document.title = "30 minute timer | sense of time";
+    document.title = "30-Minute Timer | Deep Work & Strategic Progress";
     return () => {
       document.title = "sense of time";
     };
@@ -64,6 +64,8 @@ function Timer30() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Helmet>
+        <title>30-Minute Timer | Deep Work & Strategic Progress</title>
+        <meta name="description" content="Boost deep work with a 30-minute visual timer. Ideal for writing, design, or strategic tasks. Manage time stress-free and keep momentum flowing." />
         <link rel="canonical" href="https://senseoftime.online/30-minute-timer" />
       </Helmet>
       <header className="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
