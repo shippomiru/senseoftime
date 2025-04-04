@@ -85,7 +85,7 @@ function Timer30() {
             30 Minute Timer
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto font-normal leading-relaxed">
-            Keep time visible, stay in the zone. A visual timer that makes time tangible, helping you focus deeply. Ideal for work sprints, mindful breaks, or tackling tasks one step at a time.
+            Keep time visible, stay in the zone. A visual timer that makes time tangible, helping you focus deeply. Tuck it in a corner of your screen or keep it handy on your phone as your focus sidekick.
           </p>
         </div>
 
@@ -161,7 +161,7 @@ function Timer30() {
             <div className="space-y-4 text-lg text-gray-600 dark:text-gray-300">
               <p>A visual timer helps you stay aware of time while keeping you focused and on track.</p>
               <p>Perfect for neurodivergent thinkers — set your ideal sprint length, break big tasks into bite-sized steps, and work without feeling overwhelmed.</p>
-              <p>Tuck it in a corner of your screen or keep it handy on your phone as your focus sidekick.</p>
+            
             </div>
 
             <p className="font-bold text-lg text-gray-900 dark:text-white mb-4">
