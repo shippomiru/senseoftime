@@ -8,11 +8,58 @@ function Timer10() {
   const [isRunning, setIsRunning] = useState(false);
   const [progress, setProgress] = useState(100);
   const totalTime = useRef(10 * 60);
+  const workerRef = useRef<Worker | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const [audioInitialized, setAudioInitialized] = useState(false);
   
+  const initAudio = () => {
+    if (!audioContextRef.current) {
+      console.log('初始化音频上下文...');
+      try {
+        audioContextRef.current = new AudioContext();
+        console.log('音频上下文创建成功');
+        setAudioInitialized(true);
+      } catch (error) {
+        console.error('创建音频上下文失败:', error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+      }
+    };
+  }, []);
+
   useEffect(() => {
     document.title = "10-Minute Timer | Light Sprints & Focus Transitions";
     return () => {
       document.title = "sense of time";
+    };
+  }, []);
+
+  useEffect(() => {
+    // 创建 Web Worker
+    workerRef.current = new Worker(new URL('../workers/timerWorker.ts', import.meta.url));
+    
+    // 监听 Worker 消息
+    workerRef.current.onmessage = (e) => {
+      if (e.data === 'tick') {
+        setTimeLeft(prev => {
+          const newTime = prev - 1;
+          setProgress((newTime / totalTime.current) * 100);
+          return newTime;
+        });
+      }
+    };
+
+    return () => {
+      // 清理 Worker
+      if (workerRef.current) {
+        workerRef.current.terminate();
+      }
     };
   }, []);
 
@@ -22,11 +69,83 @@ function Timer10() {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
+  const playAlarmSound = () => {
+    if (!audioContextRef.current) {
+      console.log('音频上下文未初始化');
+      return;
+    }
+
+    if (audioContextRef.current.state === 'suspended') {
+      console.log('音频上下文被暂停，尝试恢复...');
+      audioContextRef.current.resume().then(() => {
+        console.log('音频上下文已恢复');
+        playSound();
+      }).catch(error => {
+        console.error('恢复音频上下文失败:', error);
+      });
+    } else {
+      playSound();
+    }
+  };
+
+  const playSound = () => {
+    console.log('开始播放通知音效...');
+    
+    const playNotification = (startTime: number) => {
+      // 创建音频源
+      fetch('/notification.mp3')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('无法加载音频文件');
+          }
+          return response.arrayBuffer();
+        })
+        .then(arrayBuffer => audioContextRef.current!.decodeAudioData(arrayBuffer))
+        .then(audioBuffer => {
+          console.log('音频文件解码成功，准备播放');
+          
+          // 播放三次
+          for (let i = 0; i < 3; i++) {
+            const source = audioContextRef.current!.createBufferSource();
+            source.buffer = audioBuffer;
+            source.connect(audioContextRef.current!.destination);
+            
+            // 每次播放间隔1秒
+            const playTime = startTime + i * (audioBuffer.duration + 1);
+            source.start(playTime);
+            
+            console.log(`安排第 ${i+1} 次播放，时间：${playTime}`);
+          }
+        })
+        .catch(error => {
+          console.error('音频播放失败:', error);
+        });
+    };
+
+    const startTime = audioContextRef.current!.currentTime;
+    playNotification(startTime);
+  };
+
   const toggleTimer = () => {
+    console.log('点击按钮，当前状态:', {
+      isRunning,
+      timeLeft,
+      audioInitialized,
+      audioContextState: audioContextRef.current?.state
+    });
+    
+    if (!audioInitialized) {
+      console.log('音频未初始化，开始初始化');
+      initAudio();
+    }
+    
     if (timeLeft === 0) {
       resetTimer();
     } else {
       setIsRunning(!isRunning);
+      if (workerRef.current) {
+        workerRef.current.postMessage(isRunning ? 'stop' : 'start');
+      }
     }
   };
 
@@ -34,28 +153,22 @@ function Timer10() {
     setIsRunning(false);
     setTimeLeft(totalTime.current);
     setProgress(100);
+    if (workerRef.current) {
+      workerRef.current.postMessage('stop');
+    }
   };
 
   useEffect(() => {
-    let interval: number | undefined;
-    
-    if (isRunning && timeLeft > 0) {
-      interval = window.setInterval(() => {
-        setTimeLeft(prev => {
-          const newTime = prev - 1;
-          setProgress((newTime / totalTime.current) * 100);
-          return newTime;
-        });
-      }, 1000);
-    } else if (timeLeft === 0) {
+    if (timeLeft === 0) {
+      console.log('计时结束，准备播放声音');
       setIsRunning(false);
       setProgress(0);
+      if (workerRef.current) {
+        workerRef.current.postMessage('stop');
+      }
+      playAlarmSound();
     }
-
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [isRunning, timeLeft]);
+  }, [timeLeft]);
 
   const radius = 96;
   const circumference = 2 * Math.PI * radius;
