@@ -13,13 +13,27 @@ function MetaUpdater() {
   const location = useLocation();
 
   React.useEffect(() => {
-    // Find the meta tag for the current route
+    // 找到当前路由的meta标签
     const metaTag = document.querySelector(`meta[data-route="${location.pathname}"]`);
     if (metaTag) {
-      // Update the default meta description
+      // 更新默认meta描述
       const defaultMeta = document.querySelector('meta[name="description"]:not([data-route])');
       if (defaultMeta) {
         defaultMeta.setAttribute('content', metaTag.getAttribute('content') || '');
+      }
+      
+      // 更新canonical链接
+      const canonicalLink = document.querySelector('link[rel="canonical"]');
+      if (canonicalLink) {
+        const pathname = location.pathname;
+        // 如果是主页，使用根URL
+        if (pathname === '/') {
+          canonicalLink.setAttribute('href', 'https://senseoftime.online/');
+        } else {
+          // 否则使用完整的内页URL
+          canonicalLink.setAttribute('href', `https://senseoftime.online${pathname}`);
+        }
+        console.log(`已更新canonical链接为: ${canonicalLink.getAttribute('href')}`);
       }
     }
   }, [location]);

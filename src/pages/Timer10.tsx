@@ -177,9 +177,8 @@ function Timer10() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Helmet>
-        <title>10-Minute Timer | Light Sprints & Focus Transitions</title>
+        <title>10-Minute Timer | For Short Tasks & Quick Focus</title>
         <meta name="description" content="Master short tasks with a visual 10-minute timer. Sort emails, refresh your mind, or power through to-dos. Simple tools for smoother focus sessions." />
-        <link rel="canonical" href="https://senseoftime.online/10-minute-timer" />
       </Helmet>
       <header className="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -179,7 +179,6 @@ function Timer15() {
       <Helmet>
         <title>15-Minute Timer | Start Tasks & Build Momentum</title>
         <meta name="description" content="The 15-minute timer that helps you start tasks without pressure. Clean a workspace, draft ideas, or tackle a chapter—track progress with clarity." />
-        <link rel="canonical" href="https://senseoftime.online/15-minute-timer" />
       </Helmet>
       <header className="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -177,9 +177,8 @@ function Timer20() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Helmet>
-        <title>20-Minute Timer | Flow Sessions & Focused Work</title>
+        <title>20-Minute Timer | For Focus Blocks & Deep Work</title>
         <meta name="description" content="A 20-minute visual timer for focused work blocks. Dive into writing, coding, or creative projects. Stay in the zone and make every minute count." />
-        <link rel="canonical" href="https://senseoftime.online/20-minute-timer" />
       </Helmet>
       <header className="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

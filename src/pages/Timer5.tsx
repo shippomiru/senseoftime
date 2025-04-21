@@ -177,9 +177,8 @@ function Timer5() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Helmet>
-        <title>5-Minute Timer | Quick Tasks & Mini-Breaks Made Simple</title>
+        <title>5-Minute Timer | For Quick Tasks & Mini-Breaks</title>
         <meta name="description" content="A visual 5-minute timer for quick tasks, mini-breaks, or kickstarting productivity. Track time effortlessly and stay motivated with progress you can see." />
-        <link rel="canonical" href="https://senseoftime.online/5-minute-timer" />
       </Helmet>
       <header className="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
